@@ -3,16 +3,20 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const catalogRouter = require("./routes/catalog");
+const catalogRouter = require("./routes/catalog");``
 const router = express.Router();
+
 // Set up mongoose connection
 const mongoose = require('mongoose');
-const mongoDB = 'mongodb+srv://Chimebuka:Ebukanian@cluster0.gsmfndj.mongodb.net/library?retryWrites=true&w=majority';
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+// const mongoDB = 'mongodb+srv://Chimebuka:Ebukanian@cluster0.gsmfndj.mongodb.net/library?retryWrites=true&w=majority';
+// mongoose.connect(mongoDB, { useNewU                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         rlParser: true, useUnifiedTopology: true });
+// const db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+mongoose.connect('mongodb://localhost/library', { useNewUrlParser: true });
+
 
 var app = express();
 
