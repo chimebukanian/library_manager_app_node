@@ -3,9 +3,14 @@ const Author=require('../models/author');
 const Genre=require('../models/genre');
 const Book=require('../models/book');
 
-exports.bookinstance_list=(req, res)=>{
-    res.send('not implemented: bookinstance list');
-};
+const asyncHandler = require('express-async-handler');
+
+
+exports.bookinstance_list=asyncHandler(async (req, res)=>{
+    allBookInstance= await BookInstance.find().populate('book').exec();
+
+    res.render('bookinstance_list', {title: "All bookinstances", bookinstance_list:allBookInstance });
+});
 
 exports.bookinstance_detail=(req,res)=>{
     res.send(`not implemented:bookinstsance detail: ${req.params.id}`);

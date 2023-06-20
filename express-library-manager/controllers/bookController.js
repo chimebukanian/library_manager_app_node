@@ -3,46 +3,43 @@ const BookInstance=require('../models/bookinstance');
 const Author=require('../models/author');
 const Genre=require('../models/genre');
 
-const async=require('async');
-
-exports.index = (req, res) => {
-  async.parallel(
-    {
-      book_count(callback){
-      Book.countDocuments({},callback)
-      },
-
-      book_instance_count(callback){
-        BookInstance.countDocuments({},callback)
-      },
-
-      author_count(callback){
-        Author.countDocuments({},callback)
-      },
-
-      book_instance_available_count(callback){
-        BookInstance.countDocuments({status: "Available"}, callback);
-      },
-
-      genre_count(callback){
-        Genre.countDocuments({}, callback)
-      }      
-    },
-
-    (err, results)=>{
-      res.render("index", {
-        title: "Local Library Home",
-        error: err,
-        data: results,
-      })
-    }
-  )
-};
-
+const asyncHandler=require('express-async-handler');
+const aysnc=require('async');
+exports.index = asyncHandler(async (req, res, next) => {
+  const [
+    numBooks, 
+    numBookInstances, 
+    numAvailableBookInstances, 
+    numAuthors, 
+    numGenres,]
+  = await Promise.all([
+    Book.countDocuments({}).exec(),
+    BookInstance.countDocuments({}).exec(),
+    BookInstance.countDocuments({status:"available"}).exec(),
+    Author.countDocuments({}).exec(),
+    Genre.countDocuments({}).exec(),
+  ]);
+  let data={
+    title: "Local Library Home",
+    book_count:numBooks,
+    book_instance_count:numBookInstances,
+    book_instance_available_count:numAvailableBookInstances,
+    author_count:numAuthors,
+    genre_count:numGenres,
+  }
+  res.render("index", {data})
+});
+ 
+      
+     
 // Display list of all books.
-exports.book_list = (req, res) => {
-  res.send("NOT IMPLEMENTED: Book list");
-};
+exports.book_list = asyncHandler(async (req, res) => {
+  const allBooks=await Book.find({}, "title author")
+  .sort({title:1})
+  .populate("author")
+  .exec();
+  res.render("book_list", {title:"all books", book_list:allBooks});
+});
 
 // Display detail page for a specific book.
 exports.book_detail = (req, res) => {

@@ -1,8 +1,15 @@
 const Author=require("../models/author");
+const asyncHandler=require('express-async-handler');
+const async=require('async');
 
-exports.author_list=(req,res)=>{
-    res.send("NOT IMPLEMENTED: Author list");
-};
+exports.author_list=asyncHandler(async (req,res)=>{
+    const allAuthors=await Author.find().sort({family_name:1}).exec();
+
+    res.render("author_list", {
+        title: "Author List",
+        author_list: allAuthors,
+    });
+});
 
 exports.author_detail=(req,res)=>{
     res.send(`NOT IMPLEmENTED: Author Detail ${req.params.id}`);;
