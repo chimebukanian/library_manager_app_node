@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const {DateTime}=require("luxon");
+
+
 const schema = mongoose.Schema
 
 const authorSchema = new schema({
@@ -29,4 +32,17 @@ authorSchema
         return `/catalog/author/$this._id}`;
     });
 
+authorSchema
+    .virtual('date_of_birth_formatted')
+    .get(function(){
+        return DateTime.fromJSDate(this.date_of_birth).toLocaleString(DateTime.DATE_MED);
+        
+    });
+
+authorSchema
+    .virtual('date_of_death_formatted')
+    .get(function(){
+        return DateTime.fromJSDate(this.date_of_death).toLocaleString(DateTime.DATE_MED);
+        
+    });    
 module.exports=mongoose.model('Author', authorSchema);
