@@ -12,9 +12,19 @@ exports.bookinstance_list=asyncHandler(async (req, res)=>{
     res.render('bookinstance_list', {title: "All bookinstances", bookinstance_list:allBookInstance });
 });
 
-exports.bookinstance_detail=(req,res)=>{
-    res.send(`not implemented:bookinstsance detail: ${req.params.id}`);
-};
+exports.bookinstance_detail=asyncHandler(async (req, res, next)=>{
+
+    const bookInstance = await BookInstance.findById(req.params.id).populate().exec();
+    if (bookInstance==null){
+        const err=new Error("Book copy not found");
+        err.status=404;
+        return next(err);
+    }
+    res.render(`bookinstance_detail`, {
+        title: "book copy:",
+        bookinstance
+    });
+});
 
 exports.bookinstance_create_get=(req, res)=>{
     res.send("not implement:bookinstance create get");
