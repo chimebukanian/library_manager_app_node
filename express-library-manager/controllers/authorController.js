@@ -6,7 +6,7 @@ const asyncHandler=require('express-async-handler');
 const async=require('async');
 
 exports.author_list=asyncHandler(async (req,res)=>{
-    const allAuthors=await Author.find().sort({family_name:1}).exec();
+    const allAuthors=await Author.find().sort({last_name:1}).exec();
 
     res.render("author_list", {
         title: "Author List",
@@ -43,19 +43,19 @@ exports.author_create_post= [
         .withMessage("first name must be specified")
         .isAlphanumeric()
         .withMessage("first name has non-alphanumeric characters"),
-    body("family_name")
+    body("last_name")
         .trim()
         .isLength({min:1})
         .escape()
-        .withMessage("family name must be specified")
+        .withMessage("last name must be specified")
         .isAlphanumeric()
-        .withMessage("Famiy name has non-alphanumeric characters"),
+        .withMessage("Last name has non-alphanumeric characters"),
     body("date_of_birth", "invalid date of birth")
         .optional({values:'falsy'})
-        .isISO8901()
+        .isISO8601()
         .toDate(),
     body("date_of_death", "invalid date of death")
-        .optional(({values:"falsy"}))
+        .optional({values:"falsy"})
         .isISO8601()
         .toDate(),
     
@@ -64,11 +64,11 @@ exports.author_create_post= [
 
         const author=new Author({
             first_name:req.body.first_name,
-            family_name:req.body.family_name,
-            date_of_birth:req.bbody.date_of_birth,
+            last_name:req.body.last_name,
+            date_of_birth:req.body.date_of_birth,
             date_of_death:req.body.date_of_death,
         });
-        if (!error.isempty()){
+        if (!errors.isEmpty()){
             res.render("author_form", {
                 title:"Create author",
                 author:author,
@@ -77,7 +77,7 @@ exports.author_create_post= [
             return;
         } else {
             await author.save()
-            redirect(author.url)
+            res.redirect(author.url)
         }
 })
 ]

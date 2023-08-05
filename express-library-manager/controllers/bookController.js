@@ -3,7 +3,7 @@ const BookInstance=require('../models/bookinstance');
 const Author=require('../models/author');
 const Genre=require('../models/genre');
 
-const {validaitionResult, body}=require('express-validator')
+const {validationResult, body}=require('express-validator')
 const asyncHandler=require('express-async-handler');
 const aysnc=require('async');
 exports.index = asyncHandler(async (req, res, next) => {
@@ -65,12 +65,12 @@ exports.book_create_get = asyncHandler(async (req, res, next) => {
 
   const [authors, genres]=await Promise.all([
     Author.find().exec(),
-    Book.find().exec()]);
+    Genre.find().exec()]);
 
   res.render("book_form", {
     title:"Create book",
     authors, 
-    genres
+    genres,
   });
 });
 
@@ -79,9 +79,10 @@ exports.book_create_post = [
 
   (req, res, next)=>{
     if (!(req.body.genre instanceof Array)){
-      if((req.body.genre===undefined))
+      if((typeof req.body.genre==="undefined"))
         req.body.genre = []
       else req.body.genre=[req.body.genre]
+      console.log(req.body,"after")
     }
     next();
   },
@@ -115,7 +116,7 @@ exports.book_create_post = [
       genre:req.body.genre      
     });
 
-    if(!errors.isempty){
+    if(!errors.isEmpty){
       const [authors, genres]=await Promise.all([
         Author.find().exec(),
         Genre.find().exec()
@@ -132,12 +133,11 @@ exports.book_create_post = [
         authors,
         genres,
         book,
-        errors:errors.array(),
-
+        errors:errors.array()
       });
     }else{
       await book.save();
-      res.redirect(book.url)
+      res.redirect(book.url);
     }
 })
 ]
