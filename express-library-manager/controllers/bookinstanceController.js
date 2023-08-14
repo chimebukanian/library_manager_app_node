@@ -64,11 +64,16 @@ exports.bookinstance_create_post=[
             selected_book:bookInstance.book._id,
             errors:errors.array(),
             bookinstance:bookInstance
-    })
+    });
+    return;
+        }else{
+            await b=BookInstance.save();
+            res.redirect(bookinstance.url);
+        }
         }
     
-})
-]
+)
+];
 
 exports.bookinstance_delete_get=(req,res)=>{
     res.send("not implemented:bookinstance delete get");

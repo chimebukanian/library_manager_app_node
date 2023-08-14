@@ -1,0 +1,24 @@
+extends layout 
+
+block content 
+    h1=title 
+
+    form(method='POST' action='')
+        .form-group 
+            label(for=book) Book :
+            select#book.form-control(type='select' placeholder='select book' name='book' required='true')
+                books.sort(function(a,b){
+                    let textA=a.title.toUpperCase();
+                    let textB=b.title.toUpperCase();
+                    return (textA<textB)? -1 : (textA>textB)? 1 : 0});
+                for book in books 
+                    option(value="book._id", selected=(selected_book===book._id.toString()? 'selected':false)) #{book.title}
+
+        div.form-group
+            label(for='imprint') Imprint: 
+            input#imprint.form-control(type='text' placeholder='Publisher, date information' name='imprint' required='true' value=
+            (undefined===bookinstance ? '' : bookinstance.imprint))
+
+        div.form-group
+            label(for='status') Status: 
+            select#due_baack.form-control(type='select' placeholder='Select status' name='status' required='true')
