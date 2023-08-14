@@ -18,7 +18,14 @@ block content
             label(for='imprint') Imprint: 
             input#imprint.form-control(type='text' placeholder='Publisher, date information' name='imprint' required='true' value=
             (undefined===bookinstance ? '' : bookinstance.imprint))
-
+        div.form-group
+            label(for='due_back') Date to be available: 
+            input#due_back.form-control(type='date' name='due_back' value=
+            (undefined===bookinstance? '' bookinstance.due_back_yyyy_mm_dd))
         div.form-group
             label(for='status') Status: 
             select#due_baack.form-control(type='select' placeholder='Select status' name='status' required='true')
+                option(value='Maintenance' selected=(undefined===bookinstance || bookinstance.status='Maintenance' ? false:'selected')) Maintenance
+                option(value='Available' selected=(undefined===bookinstance || bookinstance.status='Available' ? false:'selected')) Available
+                option(value='Loaned' selected=(undefined===bookinstance || bookinstance.status='Loaned' ? false:'selected')) Loaned
+                
