@@ -22,7 +22,7 @@ block content
                             option(value=author._id) #{author.name}
             div.form-group 
                 label(for='summary') Summary: 
-                textarea#summary.form-control(type='textareaa', placeholder='Summary' name='summary' required='true') #{undefined===book? '' : book.summary}
+                textarea#summary.form-control(type='textareaa', placeholder='Summary' name='summary' ) #{undefined===book? '' : book.summary}
             div.form-group
                 label(for-'isbn') ISBN: 
                 input#isbn.form-control(type='textarea', 
